@@ -1,0 +1,17 @@
+README
+
+Fisiere incluse:
+
+Fisiere sursa: allocator.c
+README
+Makefile
+
+Toate fisierele sunt comprimate intr-o arhiva ZIP, care cuprinde fisierele sursa, acest README si un makefile cu doua reguli (build si clean), cu ajutorul carora se vor compila fisierele sursa rezultate, intr-un executabil (allocator) si se va sterge, la apel, fisierul executabil.
+
+Ideea esentiala in implementarea programului consta in alocarea unei arene de dimensiune data, folosind functia malloc pentru a aloca memoria,"jonglarea" in aceasta arena facandu-se apoi, folosind diferite functii create care aloca si, respectiv, elibereaza blocurile de memorie din arena sau, pur si simplu, afiseaza diferite detalii despre starea arenei. 
+
+Programul va primi de la tastatura cateva comenzi(INITIALIZE, FINALIZE etc.) care vor fi interpretate in functia main, cu ajutorul unor functii specifice sirurilor de caractere (strtok, fgets). Se vor depozita atat comenzile propriu-zise, cat si parametrii aferenti in vectori de lungime variabila, care apoi, in urma unor comparatii vor fi interpretati si vor duce la apelarea unei functii (fiecare functie corespunde unei comenzi).
+
+In ceea ce priveste functiile, exista in implementarea problemei functii mai mult sau mai putin simple (de tipul INITIALIZE sau FINALIZE), care sunt relativ simple si nu constituie subiectul unei explicatii. Pe de alta parte, sunt unele functii care necesita oarecare explicatii, intrucat se bazeaza pe anumiti pasi si anumite cazuri intalnite in implementare. De exemplu, functia ALLOC (o simulare a functiei malloc), aloca anumite blocuri in arena care simuleaza memoria, impartind problema in mai multi pasi. Se studiaza mai intai cazurile in care exista blocuri de memorie si se cauta spatii libere intre acele blocuri, iar apoi cazurile in care, efectiv, nu exista blocuri de memorie. Analog se procedeaza cu functiile SHOW_FREE, SHOW_USAGE sau SHOW_ALLOCATIONS. Ideea centrala e de a divide problema si de a parcurge pe bucati fiecare caz in parte.
+
+Referitor la problemele tehnice, trebuie mentionat faptul ca cele mai mari dificultati au aparut pe parcursul apelarii functiei ALLOC, fiindca de multe ori blocurile respective erau alocate gresit, datorita lucrului cu point-eri (conversia de la p(unsigned char) la q(int) prin cast, cauzand de multe ori confuzie), ducand la coruperea arenei. In acest sens, in functia main, apelarea functiei strtok a generat de multe ori clasica eroare "segmentation fault", deoarece, in cele mai multe cazuri, se efectuau operatii asupra sirului citit in cadrul buclei while, distrugand efectiv sirul si anuland modificarile produse in spate (inserarea NULL in locul caracterlor ce tin de loc de delimitatoare).
